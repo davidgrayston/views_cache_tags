@@ -1,0 +1,4 @@
+name = View Cache Tags
+description = Cache invalidation for node views
+version = 7.x-1.0
+core = 7.x
