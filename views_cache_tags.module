@@ -77,7 +77,11 @@ function _views_cache_tags_extract_tids_from_where($query) {
             if (is_object($condition['value']) && get_class($condition['value']) == 'SelectQuery') {
               $subquery_condition_items = $condition['value']->conditions();
               foreach ($subquery_condition_items as $subquery_condition_item) {
-                if (is_object($subquery_condition_item['field']) && get_class($subquery_condition_item['field']) == 'DatabaseCondition') {
+                if (
+                  isset($subquery_condition_item['field']) &&
+                  is_object($subquery_condition_item['field']) &&
+                  get_class($subquery_condition_item['field']) == 'DatabaseCondition'
+                ) {
                   $subquery_conditions = $subquery_condition_item['field']->conditions();
                   foreach ($subquery_conditions as $subquery_condition) {
                     if (isset($subquery_condition['field']) && substr($subquery_condition['field'], -3) == 'tid') {
