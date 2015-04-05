@@ -59,12 +59,21 @@ function _views_cache_tags_extract_tids_from_joins($query) {
  */
 function _views_cache_tags_extract_tids_from_where($query) {
   $tids = array();
-  // Grab tids from sub queries.
   if (isset($query->where)) {
     foreach ($query->where as $condition_items) {
       if (isset($condition_items['conditions']) && is_array($condition_items['conditions'])) {
         foreach ($condition_items['conditions'] as $condition) {
-          if (isset($condition['field']) && substr($condition['field'], -3) == 'nid') {
+          if (isset($condition['field']) && substr($condition['field'], -3) == 'tid') {
+            // Get tid from basic where clause.
+            if (is_array($condition['value'])) {
+              $tids = array_merge($tids, $condition['value']);
+            }
+            else {
+              $tids[] = $condition['value'];
+            }
+          }
+          elseif (isset($condition['field']) && substr($condition['field'], -3) == 'nid') {
+            // Extract tids from node sub queries.
             if (is_object($condition['value']) && get_class($condition['value']) == 'SelectQuery') {
               $subquery_condition_items = $condition['value']->conditions();
               foreach ($subquery_condition_items as $subquery_condition_item) {
@@ -116,7 +125,6 @@ function views_cache_tags_tid_cache_tag($tid) {
 function views_cache_tags_tid_cache_tag_reset($tid) {
   $cache_tag = 'term_cache_tag_' . $tid . '_' . time();
   cache_set(_views_cache_tags_tid_cache_tag_cid($tid), $cache_tag);
-  syslog(5, _views_cache_tags_tid_cache_tag_cid($tid) . '=' . $cache_tag);
   return $cache_tag;
 }
 
