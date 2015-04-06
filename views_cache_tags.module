@@ -17,6 +17,12 @@ function views_cache_tags_views_query_alter(&$view, &$query) {
     $tids = array_merge($tids, _views_cache_tags_extract_tids_from_joins($query));
     $tids = array_merge($tids, _views_cache_tags_extract_tids_from_where($query));
 
+    // Ensure all values are integers.
+    $tids = array_map('intval', $tids);
+
+    // Remove duplicates.
+    $tids = array_unique($tids);
+
     // Add tid cache tags to query to affect the query cache key.
     foreach (array_unique($tids) as $tid) {
       $comments[] = views_cache_tags_tid_cache_tag($tid);
@@ -74,10 +80,10 @@ function _views_cache_tags_extract_tids_from_where($query) {
           }
           elseif (isset($cond['field']) && substr($cond['field'], -3) == 'nid') {
             // Extract tids from node sub queries.
-            if (is_object($cond['value']) && get_class($cond['value']) == 'SelectQuery') {
+            if (is_object($cond['value']) && $cond['value'] instanceof SelectQuery) {
               $sq_cond_items = $cond['value']->conditions();
               foreach ($sq_cond_items as $sq_cond_item) {
-                if (isset($sq_cond_item['field']) && is_object($sq_cond_item['field']) && get_class($sq_cond_item['field']) == 'DatabaseCondition') {
+                if (isset($sq_cond_item['field']) && is_object($sq_cond_item['field']) && $sq_cond_item['field'] instanceof DatabaseCondition) {
                   $sq_conds = $sq_cond_item['field']->conditions();
                   foreach ($sq_conds as $sq_cond) {
                     if (isset($sq_cond['field']) && substr($sq_cond['field'], -3) == 'tid') {
@@ -104,7 +110,7 @@ function _views_cache_tags_extract_tids_from_where($query) {
  * The CID for specified tids cache tag.
  */
 function _views_cache_tags_tid_cache_tag_cid($tid) {
-  return 'term_cache_tag_' . $tid;
+  return 'term_cache_tag_' . intval($tid);
 }
 
 /**
@@ -123,12 +129,10 @@ function views_cache_tags_tid_cache_tag($tid) {
  * Set cache tag for specified tid.
  */
 function views_cache_tags_tid_cache_tag_reset($tid) {
-  $cache_tag = 'term_cache_tag_' . $tid . '_' . time();
+  $cache_tag = 'term_cache_tag_' . intval($tid) . '_' . time();
   cache_set(_views_cache_tags_tid_cache_tag_cid($tid), $cache_tag);
   return $cache_tag;
 }
-
-
 
 /**
  * Implements hook_node_insert().
