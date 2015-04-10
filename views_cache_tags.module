@@ -10,30 +10,30 @@ function views_cache_tags_views_api() {
 }
 
 /**
- * The CID for specified tids cache tag.
+ * The CID for specified entity's cache tag.
  */
-function _views_cache_tags_tid_cache_tag_cid($tid) {
-  return 'term_cache_tag_' . intval($tid);
+function _views_cache_tags_entity_cache_tag_cid($entity_id, $entity_type) {
+  return 'views_cache_tag:' . $entity_type . ':' . intval($entity_id);
 }
 
 /**
- * Get the cache tag for specified tid.
+ * Get the cache tag for specified entity.
  */
-function views_cache_tags_tid_cache_tag($tid) {
-  $cache = cache_get(_views_cache_tags_tid_cache_tag_cid($tid));
+function views_cache_tags_entity_cache_tag($entity_id, $entity_type) {
+  $cache = cache_get(_views_cache_tags_entity_cache_tag_cid($entity_id, $entity_type));
   if (isset($cache->data)) {
     return $cache->data;
   }
 
-  return views_cache_tags_tid_cache_tag_reset($tid);
+  return views_cache_tags_entity_cache_tag_reset($entity_id, $entity_type);
 }
 
 /**
- * Set cache tag for specified tid.
+ * Set cache tag for specified entity.
  */
-function views_cache_tags_tid_cache_tag_reset($tid) {
-  $cache_tag = 'term_cache_tag_' . intval($tid) . '_' . time();
-  cache_set(_views_cache_tags_tid_cache_tag_cid($tid), $cache_tag);
+function views_cache_tags_entity_cache_tag_reset($entity_id, $entity_type) {
+  $cache_tag = 'views_cache_tag:' . $entity_type . ':' . intval($entity_id) . ':' . time();
+  cache_set(_views_cache_tags_entity_cache_tag_cid($entity_id, $entity_type), $cache_tag);
   return $cache_tag;
 }
 
@@ -82,11 +82,11 @@ function views_cache_tags_invalidate_cache($node) {
       // Reset the term cache tag.
       if (isset($node->{$field_name}[LANGUAGE_NONE][0])) {
         foreach ($node->{$field_name}[LANGUAGE_NONE] as $key => $value) {
-          views_cache_tags_tid_cache_tag_reset($value['tid']);
+          views_cache_tags_entity_cache_tag_reset($value['tid'], 'taxonomy_term');
           // Also invalidate parent term tags.
           if ($parent_terms = taxonomy_get_parents_all($value['tid'])) {
             foreach ($parent_terms as $parent_term) {
-              views_cache_tags_tid_cache_tag_reset($parent_term->tid);
+              views_cache_tags_entity_cache_tag_reset($parent_term->tid, 'taxonomy_term');
             }
           }
         }

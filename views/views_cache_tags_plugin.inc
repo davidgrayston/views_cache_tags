@@ -46,7 +46,7 @@ class views_cache_tags_plugin extends views_plugin_cache_time {
     // Add tid cache tags to query to affect the query cache key.
     $tags = array();
     foreach (array_unique($tids) as $tid) {
-      $tags[] = views_cache_tags_tid_cache_tag($tid);
+      $tags[] = views_cache_tags_entity_cache_tag($tid, 'taxonomy_term');
     }
 
     // Allow modules to alter view tags.
