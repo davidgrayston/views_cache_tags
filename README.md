@@ -1,9 +1,10 @@
 # views_cache_tags
 
 Concept:
-- Add tid cache tags as query comments to affect the query cache key
+- Generate view cache key using term cache tags
 - Reset these cache tags when a node attached to the term is saved
 - As a result, the query cache key will invalidate
- 
+- Also allows altering of tags
+
 Current functionality:
-- This will only invalidate time based cached views that have tid filters
+- Extends time-based view cache plugin
