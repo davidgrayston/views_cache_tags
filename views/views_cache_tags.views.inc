@@ -15,7 +15,7 @@ function views_cache_tags_views_plugins() {
         'path' => drupal_get_path('module', 'views_cache_tags') . '/views',
         'title' => t("Cache Tags"),
         'help' => t("Add cache tags to view to allow invalidation."),
-        'handler' => 'views_cache_tags_plugin',
+        'handler' => 'ViewsCacheTagsPlugin',
         'uses options' => TRUE,
       ),
     ),

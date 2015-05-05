@@ -10,7 +10,7 @@
  *
  * @see views_plugin_cache()
  */
-class views_cache_tags_plugin extends views_plugin_cache_time {
+class ViewsCacheTagsPlugin extends views_plugin_cache_time {
 
   /**
    * Implements views_plugin_cache#get_output_key().

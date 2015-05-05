@@ -1,4 +1,10 @@
 <?php
+
+/**
+ * @file
+ * Views cache tags module.
+ */
+
 /**
  * Implements hook_views_api().
  */
@@ -39,8 +45,6 @@ function views_cache_tags_entity_cache_tag_reset($entity_id, $entity_type) {
 
 /**
  * Implements hook_node_insert().
- *
- * @param $node
  */
 function views_cache_tags_node_insert($node) {
   views_cache_tags_invalidate_cache($node);
@@ -48,8 +52,6 @@ function views_cache_tags_node_insert($node) {
 
 /**
  * Implements hook_node_delete().
- *
- * @param $node
  */
 function views_cache_tags_node_delete($node) {
   views_cache_tags_invalidate_cache($node);
@@ -99,9 +101,10 @@ function views_cache_tags_invalidate_cache($node) {
  * Helper to get list of term reference fields.
  *
  * @param $node_type
- * The node type.
- * @return
- * List of term reference field names.
+ *   The node type.
+ *
+ * @return array
+ *   List of term reference field names.
  */
 function _views_cache_tags_get_taxonomy_fields($node_type) {
   $taxonomy_fields = &drupal_static(__FUNCTION__ . $node_type, array());
