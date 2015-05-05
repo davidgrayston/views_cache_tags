@@ -81,7 +81,7 @@ function views_cache_tags_invalidate_cache($node) {
     if (isset($node->{$field_name})) {
       // Reset the term cache tag.
       if (isset($node->{$field_name}[LANGUAGE_NONE][0])) {
-        foreach ($node->{$field_name}[LANGUAGE_NONE] as $key => $value) {
+        foreach ($node->{$field_name}[LANGUAGE_NONE] as $value) {
           views_cache_tags_entity_cache_tag_reset($value['tid'], 'taxonomy_term');
           // Also invalidate parent term tags.
           if ($parent_terms = taxonomy_get_parents_all($value['tid'])) {

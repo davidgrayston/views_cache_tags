@@ -16,26 +16,26 @@ class views_cache_tags_plugin extends views_plugin_cache_time {
    * Implements views_plugin_cache#get_output_key().
    */
   public function get_output_key() {
-    return parent::get_output_key() . ':' . $this->get_cache_tags_key();
+    return parent::get_output_key() . ':' . $this->getCacheTagsKey();
   }
 
   /**
    * Implements views_plugin_cache#get_results_key().
    */
   public function get_results_key() {
-    return parent::get_results_key() . ':' . $this->get_cache_tags_key();
+    return parent::get_results_key() . ':' . $this->getCacheTagsKey();
   }
 
   /**
    * Return cache tags.
    */
-  protected function get_cache_tags() {
+  protected function getCacheTags() {
     $query = $this->view->query;
 
     // Extract tids from query.
     $tids = array();
-    $tids = array_merge($tids, $this->extract_tids_from_joins($query));
-    $tids = array_merge($tids, $this->extract_tids_from_where($query));
+    $tids = array_merge($tids, $this->extractTidsFromJoins($query));
+    $tids = array_merge($tids, $this->extractTidsFromWhere($query));
 
     // Ensure all values are integers.
     $tids = array_map('intval', $tids);
@@ -69,17 +69,17 @@ class views_cache_tags_plugin extends views_plugin_cache_time {
   /**
    * Get cache tags key.
    */
-  protected function get_cache_tags_key() {
-    return md5(serialize($this->get_cache_tags()));
+  protected function getCacheTagsKey() {
+    return md5(serialize($this->getCacheTags()));
   }
 
   /**
    * Extract tids from joins.
    */
-  protected function extract_tids_from_joins($query) {
+  protected function extractTidsFromJoins($query) {
     $tids = array();
     // Discover terms filtering this view.
-    foreach ($query->table_queue as $alias => $info) {
+    foreach ($query->table_queue as $info) {
       // Grab the tids from taxonomy_index joins.
       if (isset($info['table']) && $info['table'] == 'taxonomy_index') {
         if (isset($info['join']->extra)) {
@@ -104,7 +104,7 @@ class views_cache_tags_plugin extends views_plugin_cache_time {
   /**
    * Extract tids from where clause.
    */
-  protected function extract_tids_from_where($query) {
+  protected function extractTidsFromWhere($query) {
     $tids = array();
     if (isset($query->where)) {
       foreach ($query->where as $cond_items) {
