@@ -146,4 +146,5 @@ class ViewsCacheTagsPlugin extends views_plugin_cache_time {
     }
     return array_unique($tids);
   }
+
 }

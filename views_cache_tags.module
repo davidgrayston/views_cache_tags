@@ -59,8 +59,6 @@ function views_cache_tags_node_delete($node) {
 
 /**
  * Implements hook_node_update().
- *
- * @param $node
  */
 function views_cache_tags_node_update($node) {
   // Invalidate for the updated node.
@@ -109,7 +107,7 @@ function views_cache_tags_invalidate_cache($node) {
 function _views_cache_tags_get_taxonomy_fields($node_type) {
   $taxonomy_fields = &drupal_static(__FUNCTION__ . $node_type, array());
   if (!empty($taxonomy_fields[$node_type])) {
-   return $taxonomy_fields[$node_type];
+    return $taxonomy_fields[$node_type];
   }
   if ($entity_info = field_info_instances('node', $node_type)) {
     foreach ($entity_info as $field) {
