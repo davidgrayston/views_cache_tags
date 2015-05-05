@@ -46,16 +46,24 @@ class views_cache_tags_plugin extends views_plugin_cache_time {
     // Add tid cache tags to query to affect the query cache key.
     $tags = array();
     foreach (array_unique($tids) as $tid) {
-      $tags[] = views_cache_tags_entity_cache_tag($tid, 'taxonomy_term');
+      $tags['taxonomy_term'][$tid] = $tid;
     }
 
-    // Allow modules to alter view tags.
+    // Allow modules to alter view cache tags.
     $context = array(
       'view' => $this->view,
     );
     drupal_alter('views_cache_tags_tags', $tags, $context);
 
-    return $tags;
+    // Convert entity ids into cache tags.
+    $cache_tags = array();
+    foreach ($tags as $entity_type => $entity_ids) {
+      foreach ($entity_ids as $entity_id) {
+        $cache_tags[$entity_type][$entity_id] = views_cache_tags_entity_cache_tag($entity_id, $entity_type);
+      }
+    }
+
+    return $cache_tags;
   }
 
   /**
