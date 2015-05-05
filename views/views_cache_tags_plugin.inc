@@ -15,21 +15,21 @@ class views_cache_tags_plugin extends views_plugin_cache_time {
   /**
    * Implements views_plugin_cache#get_output_key().
    */
-  function get_output_key() {
+  public function get_output_key() {
     return parent::get_output_key() . ':' . $this->get_cache_tags_key();
   }
 
   /**
    * Implements views_plugin_cache#get_results_key().
    */
-  function get_results_key() {
+  public function get_results_key() {
     return parent::get_results_key() . ':' . $this->get_cache_tags_key();
   }
 
   /**
    * Return cache tags.
    */
-  function get_cache_tags() {
+  protected function get_cache_tags() {
     $query = $this->view->query;
 
     // Extract tids from query.
@@ -69,14 +69,14 @@ class views_cache_tags_plugin extends views_plugin_cache_time {
   /**
    * Get cache tags key.
    */
-  function get_cache_tags_key() {
+  protected function get_cache_tags_key() {
     return md5(serialize($this->get_cache_tags()));
   }
 
   /**
    * Extract tids from joins.
    */
-  function extract_tids_from_joins($query) {
+  protected function extract_tids_from_joins($query) {
     $tids = array();
     // Discover terms filtering this view.
     foreach ($query->table_queue as $alias => $info) {
@@ -104,7 +104,7 @@ class views_cache_tags_plugin extends views_plugin_cache_time {
   /**
    * Extract tids from where clause.
    */
-  function extract_tids_from_where($query) {
+  protected function extract_tids_from_where($query) {
     $tids = array();
     if (isset($query->where)) {
       foreach ($query->where as $cond_items) {
