@@ -72,7 +72,7 @@ function views_cache_tags_node_update($node) {
 /**
  * Invalidate caches.
  *
- * @param stdClass $node
+ * @param object $node
  *   The node that requires cache invalidation.
  */
 function views_cache_tags_invalidate_cache($node) {
