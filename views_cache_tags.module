@@ -73,6 +73,7 @@ function views_cache_tags_node_update($node) {
  * Invalidate caches.
  *
  * @param $node
+ *   The node that requires cache invalidation.
  */
 function views_cache_tags_invalidate_cache($node) {
   // Loop the term reference fields and reset the cache tags.
@@ -98,7 +99,7 @@ function views_cache_tags_invalidate_cache($node) {
 /**
  * Helper to get list of term reference fields.
  *
- * @param $node_type
+ * @param string $node_type
  *   The node type.
  *
  * @return array
